@@ -1,0 +1,37 @@
+[tools]
+node = { version = "lts", postinstall = "npm install"}
+pnpm = "10.29.1"
+rust = { version = "1.93.0", postinstall = "cargo install tauri-cli --version '^2.10.0' --locked" }
+
+[tasks.setup]
+description = "Setup the development environment"
+run = [
+    "pnpm project:init"
+]
+
+[tasks.dev]
+description = "Run the Tauri development server"
+run = "pnpm tauri dev"
+
+[tasks.build]
+description = "Build the Tauri application"
+run = "pnpm tauri build"
+
+[tasks.test_all]
+description = "Run all tests, checks, and clippy"
+run = [
+    "cd src-tauri && cargo test --workspace --verbose",
+    "cd src-tauri && cargo check --workspace --all-targets",
+    "cd src-tauri && cargo clippy --workspace --all-targets -- -D warnings"
+]
+
+[tasks.clean_all]
+description = "Clean all dev and build artifacts"
+run = [
+    "pnpm run clean"
+]
+
+[hooks]
+enter = [
+    "echo 'Entering Tauri/Vue development environment'",
+]

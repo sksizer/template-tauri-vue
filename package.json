@@ -1,0 +1,38 @@
+{
+  "name": "tauri_vue",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "tauri": "tauri",
+    "dev": "cd src-vue && pnpm run dev",
+    "build": "cd src-vue && pnpm run build",
+    "preview": "cd src-vue && pnpm preview",
+    "clean:frontend": "cd src-vue && pnpm run clean",
+    "clean:backend": "rm -Rf src-tauri/target && rm -f src-tauri/Cargo.lock",
+    "clean:root": "rm -Rf node_modules",
+    "clean": "pnpm run clean:frontend && pnpm run clean:backend && pnpm run clean:root",
+    "install_dependencies:debian": "sudo apt install build-essential pkg-config libgtk-3-dev libglib2.0-dev libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev libssl-dev",
+    "project:init": "pnpm install && cd src-vue && pnpm install",
+    "release": "release-it",
+    "prepare": "husky",
+    "frontend:lint": "cd src-vue && pnpm run lint",
+    "frontend:typecheck": "cd src-vue && pnpm run typecheck",
+    "frontend:test": "cd src-vue && pnpm run test",
+    "backend:lint": ".scripts/backend-lint",
+    "backend:format:check": ".scripts/backend-format-check",
+    "backend:test": ".scripts/backend-test"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.10.1",
+    "@tauri-apps/plugin-opener": "^2.5.3",
+    "husky": "^9.1.7"
+  },
+  "devDependencies": {
+    "@release-it/bumper": "^7.0.5",
+    "@tauri-apps/cli": "^2.10.0",
+    "release-it": "^19.2.4",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.3"
+  }
+}
