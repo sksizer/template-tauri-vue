@@ -31,7 +31,17 @@ run = [
     "pnpm run clean"
 ]
 
+[env]
+TAURI_DEV_PORT = "{{ exec(command='scripts/dev-port.sh --service vite') | trim }}"
+STORYBOOK_PORT = "{{ exec(command='scripts/dev-port.sh --service storybook') | trim }}"
+MCP_PORT = "{{ exec(command='scripts/dev-port.sh --service mcp') | trim }}"
+HTTP_PORT = "{{ exec(command='scripts/dev-port.sh --service http') | trim }}"
+
 [hooks]
 enter = [
     "echo 'Entering Tauri/Vue development environment'",
+    "echo \"  Vite (TAURI_DEV_PORT): $TAURI_DEV_PORT\"",
+    "echo \"  Storybook (STORYBOOK_PORT): $STORYBOOK_PORT\"",
+    "echo \"  MCP (MCP_PORT): $MCP_PORT\"",
+    "echo \"  HTTP (HTTP_PORT): $HTTP_PORT\"",
 ]
