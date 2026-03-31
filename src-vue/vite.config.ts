@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 const host = 'localhost'
+const port = parseInt(process.env.TAURI_DEV_PORT || '1420')
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -11,14 +12,14 @@ export default defineConfig({
   clearScreen: false,
 
   server: {
-    port: 1420,
+    port,
     strictPort: true,
     host: host || false,
     hmr: host
       ? {
           protocol: "ws",
           host,
-          port: 1421,
+          port: port + 1,
         }
       : undefined,
   },

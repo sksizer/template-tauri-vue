@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "tauri": "tauri",
+    "tauri": "node scripts/tauri-wrapper.mjs",
     "dev": "cd src-vue && pnpm run dev",
     "build": "cd src-vue && pnpm run build",
     "preview": "cd src-vue && pnpm preview",
