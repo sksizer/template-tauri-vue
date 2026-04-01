@@ -16,15 +16,21 @@ jobs:
           node-version: lts/*
       - uses: pnpm/action-setup@v4
         with:
-          version: 10.28.2
+          version: 10.30.3
       - run: pnpm run project:init
 
       - name: Lint
         run: pnpm frontend:lint
+      - name: Oxlint
+        run: cd src-vue && pnpm run oxlint
+      - name: Format check
+        run: pnpm format:check
       - name: Type check
         run: pnpm frontend:typecheck
       - name: Test
         run: pnpm frontend:test
+      - name: Build Storybook
+        run: pnpm storybook:build
 
   rust:
     runs-on: ubuntu-22.04 # Use this bc of tauri project recommendations wrt to dependencies

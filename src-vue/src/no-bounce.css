@@ -1,0 +1,5 @@
+/* Prevent browser scroll bounce for native app feel */
+html,
+body {
+  overscroll-behavior: none;
+}
