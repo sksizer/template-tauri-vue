@@ -1,6 +1,6 @@
 [tools]
 node = { version = "lts", postinstall = "npm install"}
-pnpm = "10.29.1"
+pnpm = "10.30.3"
 rust = { version = "1.93.0", postinstall = "cargo install tauri-cli --version '^2.10.0' --locked" }
 
 [tasks.setup]

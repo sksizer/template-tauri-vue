@@ -15,24 +15,34 @@
     "install_dependencies:debian": "sudo apt install build-essential pkg-config libgtk-3-dev libglib2.0-dev libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev libssl-dev",
     "project:init": "pnpm install && cd src-vue && pnpm install",
     "release": "release-it",
-    "prepare": "husky",
     "frontend:lint": "cd src-vue && pnpm run lint",
     "frontend:typecheck": "cd src-vue && pnpm run typecheck",
     "frontend:test": "cd src-vue && pnpm run test",
+    "frontend:format": "cd src-vue && pnpm run format",
+    "frontend:format:check": "cd src-vue && pnpm run format:check",
     "backend:lint": ".scripts/backend-lint",
     "backend:format:check": ".scripts/backend-format-check",
-    "backend:test": ".scripts/backend-test"
+    "backend:test": ".scripts/backend-test",
+    "format": "pnpm run frontend:format",
+    "format:check": "pnpm run frontend:format:check",
+    "storybook": "cd src-vue && pnpm run storybook",
+    "storybook:build": "cd src-vue && pnpm run build-storybook"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.10.1",
-    "@tauri-apps/plugin-opener": "^2.5.3",
-    "husky": "^9.1.7"
+    "@tauri-apps/plugin-opener": "^2.5.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "lefthook"]
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@release-it/bumper": "^7.0.5",
     "@tauri-apps/cli": "^2.10.0",
+    "lefthook": "^1.11.13",
     "release-it": "^19.2.4",
-    "typescript": "~5.6.2",
-    "vite": "^6.0.3"
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4"
   }
 }

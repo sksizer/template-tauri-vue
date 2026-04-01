@@ -1,0 +1,20 @@
+pre-commit:
+  parallel: true
+  commands:
+    frontend-lint:
+      run: pnpm run frontend:lint
+    frontend-typecheck:
+      run: pnpm run frontend:typecheck
+    frontend-test:
+      run: pnpm run frontend:test
+    backend-lint:
+      run: pnpm run backend:lint
+    backend-format-check:
+      run: pnpm run backend:format:check
+    backend-test:
+      run: pnpm run backend:test
+
+commit-msg:
+  commands:
+    commitlint:
+      run: npx commitlint --edit {1}

@@ -54,7 +54,10 @@ async function callEcho() {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 .content {
@@ -118,7 +121,9 @@ async function callEcho() {
   font-size: 1rem;
   background: rgba(255, 255, 255, 0.9);
   color: #333;
-  transition: border-color 0.3s, background 0.3s;
+  transition:
+    border-color 0.3s,
+    background 0.3s;
 }
 
 .input-field:focus {
@@ -136,7 +141,9 @@ async function callEcho() {
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .echo-button:hover {
