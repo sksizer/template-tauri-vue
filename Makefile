@@ -2,7 +2,9 @@
 
 .PHONY: help dev build build-debug lint lint-fix format format-check typecheck \
         test test-unit rust-lint rust-format rust-test ci setup clean \
-        storybook storybook-build ports initialize rename template-check
+        storybook storybook-build ports initialize rename \
+        full-check full-write changelog \
+        template-check bring-up-to-date bring-up-to-date-all sync-cousins
 
 ## Development ---------------------------------------------------------------
 
@@ -23,6 +25,8 @@ help: ## Show this help message
 	@echo "  format         Format all code"
 	@echo "  format-check   Check formatting without changes"
 	@echo "  typecheck      Run frontend type checking"
+	@echo "  full-check     Run all code checks (lint + format-check + typecheck)"
+	@echo "  full-write     Auto-fix all formatting (frontend + Rust)"
 	@echo ""
 	@echo "Testing:"
 	@echo "  test           Run all tests (frontend + Rust)"
@@ -39,10 +43,15 @@ help: ## Show this help message
 	@echo "  setup          Install dependencies and git hooks"
 	@echo "  clean          Remove build artifacts"
 	@echo ""
+	@echo "  changelog      Generate changelog from conventional commits"
+	@echo ""
 	@echo "Template:"
 	@echo "  initialize     Interactive project initialization (rename + bundle ID)"
 	@echo "  rename         Non-interactive rename (requires PROJECT_NAME, BUNDLE_ID env vars)"
-	@echo "  template-check Check for drift against upstream template"
+	@echo "  template-check       Check for drift against upstream template"
+	@echo "  bring-up-to-date     Sync with upstream template (dry-run default)"
+	@echo "  bring-up-to-date-all Sync all downstream projects (dry-run default)"
+	@echo "  sync-cousins         Sync shared layer to cousin templates (dry-run default)"
 	@echo ""
 
 dev: ## Run tauri dev server
@@ -79,6 +88,12 @@ format-check: ## Check formatting without changes
 
 typecheck: ## Run frontend type checking
 	pnpm run frontend:typecheck
+
+full-check: lint format-check typecheck ## Run all code checks
+
+full-write: ## Auto-fix all formatting (frontend + Rust)
+	pnpm run format
+	cd src-tauri && cargo fmt --all
 
 ## Testing -------------------------------------------------------------------
 
@@ -124,3 +139,15 @@ rename: ## Non-interactive rename (PROJECT_NAME and BUNDLE_ID env vars required)
 
 template-check: ## Check for drift against upstream template
 	bash scripts/sync-template-check
+
+changelog: ## Generate changelog from conventional commits
+	git-cliff --output CHANGELOG.md
+
+bring-up-to-date: ## Sync with upstream template (dry-run default; pass ARGS="--execute" to run)
+	bash scripts/bring_up_to_date.sh $(ARGS)
+
+bring-up-to-date-all: ## Sync all downstream projects (dry-run default; pass ARGS="--execute" to run)
+	bash scripts/bring_up_to_date_all.sh $(ARGS)
+
+sync-cousins: ## Sync shared layer to cousin templates (dry-run default; pass ARGS="--execute" to run)
+	bash scripts/sync_cousins.sh $(ARGS)
