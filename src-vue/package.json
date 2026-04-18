@@ -8,14 +8,14 @@
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
     "clean": "rm -Rf node_modules dist .vite",
-    "lint": "eslint .",
+    "lint": "eslint . && oxlint .",
     "typecheck": "vue-tsc -b --noEmit",
     "oxlint": "oxlint",
     "test": "vitest run",
-    "format": "prettier --write src",
-    "format:check": "prettier --check src",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "storybook": "storybook dev -p ${STORYBOOK_PORT:-1421}",
+    "storybook:build": "storybook build -o storybook-static"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.10.1",
@@ -41,6 +41,7 @@
     "vitest": "^4.0.18",
     "vue-tsc": "^3.1.4",
     "storybook": "^10.3.3",
+    "@storybook/addon-a11y": "^10.3.3",
     "@storybook/vue3-vite": "^10.3.3",
     "eslint-plugin-storybook": "^10.3.3"
   }

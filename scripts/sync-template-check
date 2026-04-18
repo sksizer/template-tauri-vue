@@ -38,15 +38,15 @@ TOOLING_FILES=(
   "CLAUDE.md"
   "cliff.toml"
   "src-tauri/rustfmt.toml"
+  "scripts/backend-format-check"
+  "scripts/backend-lint"
+  "scripts/backend-test"
   "scripts/bring_up_to_date.sh"
   "scripts/bring_up_to_date_all.sh"
   "scripts/sync_cousins.sh"
   "scripts/dev-port.sh"
   "scripts/tauri-wrapper.mjs"
   "src-vue/eslint.config.mjs"
-  "src-vue/.prettierrc"
-  "src-vue/.prettierignore"
-  "src-vue/oxlint.json"
   "src-vue/vite.config.ts"
 )
 

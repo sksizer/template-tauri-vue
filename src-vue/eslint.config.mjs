@@ -1,5 +1,5 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
+import storybook from 'eslint-plugin-storybook'
 
 import js from '@eslint/js'
 import prettier from 'eslint-config-prettier'
@@ -15,15 +15,15 @@ export default [
     files: ['*.vue', '**/*.vue'],
     languageOptions: {
       parserOptions: {
-        parser: '@typescript-eslint/parser'
-      }
-    }
+        parser: '@typescript-eslint/parser',
+      },
+    },
   },
   {
     rules: {
-      'vue/multi-word-component-names': 'off'
-    }
+      'vue/multi-word-component-names': 'off',
+    },
   },
   prettier,
-  ...storybook.configs["flat/recommended"]
-];
+  ...storybook.configs['flat/recommended'],
+]

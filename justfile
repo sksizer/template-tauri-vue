@@ -2,6 +2,16 @@
 default:
     @just --list
 
+## Initialization ------------------------------------------------------------
+
+# Run project initialization script
+initialize:
+    scripts/initialize.sh
+
+# Run project rename script
+rename:
+    scripts/rename.sh
+
 ## Development ---------------------------------------------------------------
 
 # Run tauri dev server (auto-assigned port)
@@ -23,6 +33,40 @@ storybook:
 # Show auto-assigned port block for this worktree
 ports:
     @scripts/dev-port.sh --all
+
+## Frontend ------------------------------------------------------------------
+
+# Run Vite dev server
+frontend-dev:
+    cd src-vue && pnpm run dev
+
+# Build Vue for production
+frontend-build:
+    cd src-vue && pnpm run build
+
+# Preview production build
+frontend-preview:
+    cd src-vue && pnpm run preview
+
+# Run frontend linter
+frontend-lint:
+    pnpm run frontend:lint
+
+# Run frontend tests
+frontend-test:
+    pnpm run frontend:test
+
+# Run frontend type checking
+frontend-typecheck:
+    pnpm run frontend:typecheck
+
+# Format frontend code
+frontend-format:
+    cd src-vue && pnpm run format
+
+# Check frontend formatting
+frontend-format-check:
+    cd src-vue && pnpm run format:check
 
 ## Linting & Formatting ------------------------------------------------------
 
@@ -84,6 +128,16 @@ rust-format:
 rust-test:
     cd src-tauri && cargo test
 
+# Alias for rust-lint
+backend-lint: rust-lint
+
+# Check backend formatting
+backend-format-check:
+    pnpm run backend:format:check
+
+# Alias for rust-test
+backend-test: rust-test
+
 ## CI & Setup ----------------------------------------------------------------
 
 # Build Storybook static site
@@ -98,27 +152,13 @@ setup:
     pnpm run project:init
     pnpm lefthook install
 
-# Remove build artifacts
-clean:
-    pnpm run clean
-
-## Template ------------------------------------------------------------------
-
-# Interactive project initialization (rename + bundle ID)
-initialize:
-    bash scripts/initialize.sh
-
-# Non-interactive rename (PROJECT_NAME and BUNDLE_ID env vars required)
-rename:
-    bash scripts/rename.sh
-
-# Check for drift against upstream template
-template-check:
-    bash scripts/sync-template-check
-
 # Generate changelog from conventional commits
 changelog:
     git-cliff --output CHANGELOG.md
+
+# Check template drift against upstream
+template-check:
+    pnpm run template:check
 
 # Bring repo up to date with upstream template (dry-run by default; --execute to run)
 bring-up-to-date *args:
@@ -130,6 +170,34 @@ bring-up-to-date-all *args:
     bash scripts/bring_up_to_date_all.sh {{args}}
 alias butda := bring-up-to-date-all
 
+# Update deps within semver ranges (dry-run by default; --execute to run)
+deps-update *args:
+    bash scripts/deps_update.sh {{args}}
+
+# Update deps within semver ranges across all downstream projects
+deps-update-all *args:
+    bash scripts/deps_update_all.sh {{args}}
+
+# Upgrade deps to latest (cross-major; dry-run by default; --execute to run)
+deps-upgrade *args:
+    bash scripts/deps_upgrade.sh {{args}}
+
+# Upgrade deps to latest across all downstream projects
+deps-upgrade-all *args:
+    bash scripts/deps_upgrade_all.sh {{args}}
+
 # Sync shared layer to cousin template repos (dry-run by default; --execute to run)
 sync-cousins *args:
     bash scripts/sync_cousins.sh {{args}}
+
+# Remove build artifacts
+clean:
+    pnpm run clean
+
+# Install system dependencies (Debian/Ubuntu)
+install-deps-debian:
+    sudo apt install build-essential pkg-config libgtk-3-dev libglib2.0-dev libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev libssl-dev
+
+# Create a new release
+release:
+    pnpm run release

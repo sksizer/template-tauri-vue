@@ -16,20 +16,24 @@ jobs:
           node-version: lts/*
       - uses: pnpm/action-setup@v4
         with:
-          version: 10.30.3
+          version: 10.24.0
       - run: pnpm run project:init
 
       - name: Lint
         run: pnpm frontend:lint
-      - name: Oxlint
-        run: cd src-vue && pnpm run oxlint
+        # run: cd src-vue && pnpm run lint
+
       - name: Format check
         run: pnpm format:check
+
       - name: Type check
         run: pnpm frontend:typecheck
+        # run: cd src-vue && pnpm run typecheck
+
       - name: Test
         run: pnpm frontend:test
-      - name: Build Storybook
+
+      - name: Storybook build
         run: pnpm storybook:build
 
   rust:
@@ -51,10 +55,10 @@ jobs:
           workspaces: './src-tauri -> target'
 
       - name: Check formatting
-        run: .scripts/backend-format-check
+        run: scripts/backend-format-check
 
       - name: Clippy lints
-        run: .scripts/backend-lint
+        run: scripts/backend-lint
 
       - name: Test
-        run: .scripts/backend-test
+        run: scripts/backend-test

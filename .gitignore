@@ -1,36 +1,21 @@
-# Dependencies
-node_modules/
-pnpm-lock.yaml
-package-lock.json
-yarn.lock
+# Dev Patterns
+.worktrees
 
-# Build outputs
-dist/
-.output/
-
-# Tauri
-src-tauri/target/
-src-tauri/Cargo.lock
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
+# MacOS Misc
 .DS_Store
-Thumbs.db
 
-# Logs
-*.log
-logs/
+# IDE Cruft
+.vscode/
 
-# Environment
-.env
-.env.local
-.env.*.local
+# Node Environment
+node_modules
 
-# Misc
-.cache/
+# Vue / Vite Environment
+dist
+.vite
+
+# Rust Cargo Env
+target
+
+# Private downstream repo list (merged with scripts/downstream.txt at runtime)
+scripts/downstream.local.txt

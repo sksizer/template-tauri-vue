@@ -18,7 +18,7 @@ export default defineConfig({
     host: host || false,
     hmr: host
       ? {
-          protocol: "ws",
+          protocol: 'ws',
           host,
           port: port + 1,
         }
