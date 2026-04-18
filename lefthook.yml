@@ -1,20 +1,31 @@
-pre-commit:
-  parallel: true
-  commands:
-    frontend-lint:
-      run: pnpm run frontend:lint
-    frontend-typecheck:
-      run: pnpm run frontend:typecheck
-    frontend-test:
-      run: pnpm run frontend:test
-    backend-lint:
-      run: pnpm run backend:lint
-    backend-format-check:
-      run: pnpm run backend:format:check
-    backend-test:
-      run: pnpm run backend:test
-
 commit-msg:
   commands:
     commitlint:
-      run: npx commitlint --edit {1}
+      run: pnpm commitlint --edit {1}
+
+pre-commit:
+  parallel: true
+  commands:
+    eslint:
+      root: src-vue/
+      glob: '*.{js,ts,vue,mjs}'
+      run: pnpm eslint {staged_files}
+    clippy:
+      root: src-tauri/
+      glob: '*.rs'
+      run: cargo clippy -- -D warnings
+    rustfmt:
+      root: src-tauri/
+      glob: '*.rs'
+      run: cargo fmt -- --check
+    oxlint:
+      root: src-vue/
+      glob: '*.{js,ts,vue,mjs}'
+      run: pnpm oxlint {staged_files}
+    prettier:
+      root: src-vue/
+      glob: '*.{js,ts,vue,css,json,md,yml,yaml,mjs}'
+      run: pnpm prettier --check {staged_files}
+    typecheck:
+      root: src-vue/
+      run: pnpm typecheck

@@ -1,7 +1,13 @@
 [tools]
 node = { version = "lts", postinstall = "npm install"}
-pnpm = "10.30.3"
+pnpm = "latest"
 rust = { version = "1.93.0", postinstall = "cargo install tauri-cli --version '^2.10.0' --locked" }
+
+[env]
+TAURI_DEV_PORT = "{{ exec(command='scripts/dev-port.sh --service vite') | trim }}"
+STORYBOOK_PORT = "{{ exec(command='scripts/dev-port.sh --service storybook') | trim }}"
+MCP_PORT = "{{ exec(command='scripts/dev-port.sh --service mcp') | trim }}"
+HTTP_PORT = "{{ exec(command='scripts/dev-port.sh --service http') | trim }}"
 
 [tasks.setup]
 description = "Setup the development environment"
@@ -30,12 +36,6 @@ description = "Clean all dev and build artifacts"
 run = [
     "pnpm run clean"
 ]
-
-[env]
-TAURI_DEV_PORT = "{{ exec(command='scripts/dev-port.sh --service vite') | trim }}"
-STORYBOOK_PORT = "{{ exec(command='scripts/dev-port.sh --service storybook') | trim }}"
-MCP_PORT = "{{ exec(command='scripts/dev-port.sh --service mcp') | trim }}"
-HTTP_PORT = "{{ exec(command='scripts/dev-port.sh --service http') | trim }}"
 
 [hooks]
 enter = [

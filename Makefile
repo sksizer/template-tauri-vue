@@ -1,16 +1,27 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help dev build build-debug lint lint-fix format format-check typecheck \
-        test test-unit rust-lint rust-format rust-test ci setup clean \
-        storybook storybook-build ports initialize rename \
-        full-check full-write changelog \
+.PHONY: help initialize rename \
+        dev build build-debug storybook ports \
+        lint lint-fix format format-check typecheck full-check full-write \
+        frontend-dev frontend-build frontend-preview \
+        frontend-lint frontend-test frontend-typecheck \
+        frontend-format frontend-format-check \
+        test test-unit \
+        rust-lint rust-format rust-test \
+        backend-lint backend-format-check backend-test \
+        ci setup clean storybook-build \
+        install-deps-debian release changelog \
         template-check bring-up-to-date bring-up-to-date-all sync-cousins
 
 ## Development ---------------------------------------------------------------
 
-help: ## Show this help message
+help: ## Show this help
 	@echo ""
 	@echo "Usage: make <target>"
+	@echo ""
+	@echo "Initialization:"
+	@echo "  initialize     Run project initialization script"
+	@echo "  rename         Run project rename script"
 	@echo ""
 	@echo "Development:"
 	@echo "  dev            Run tauri dev server (auto-assigned port)"
@@ -18,6 +29,16 @@ help: ## Show this help message
 	@echo "  build-debug    Build with debug symbols"
 	@echo "  storybook      Launch Storybook dev server (auto-assigned port)"
 	@echo "  ports          Show auto-assigned port block for this worktree"
+	@echo ""
+	@echo "Frontend:"
+	@echo "  frontend-dev          Run Vite dev server"
+	@echo "  frontend-build        Build Vue for production"
+	@echo "  frontend-preview      Preview production build"
+	@echo "  frontend-lint         Run frontend linter"
+	@echo "  frontend-test         Run frontend tests"
+	@echo "  frontend-typecheck    Run frontend type checking"
+	@echo "  frontend-format       Format frontend code"
+	@echo "  frontend-format-check Check frontend formatting"
 	@echo ""
 	@echo "Linting & Formatting:"
 	@echo "  lint           Run all linters (frontend + Rust)"
@@ -32,27 +53,39 @@ help: ## Show this help message
 	@echo "  test           Run all tests (frontend + Rust)"
 	@echo "  test-unit      Run frontend unit tests only"
 	@echo ""
-	@echo "Rust:"
+	@echo "Rust / Backend:"
 	@echo "  rust-lint      Run cargo clippy"
 	@echo "  rust-format    Run cargo fmt"
 	@echo "  rust-test      Run cargo test"
+	@echo "  backend-lint         Alias for rust-lint"
+	@echo "  backend-format-check Check backend formatting"
+	@echo "  backend-test         Alias for rust-test"
 	@echo ""
 	@echo "CI & Setup:"
 	@echo "  ci             Run full CI pipeline (lint, format-check, typecheck, test, build, storybook-build)"
 	@echo "  storybook-build Build Storybook static site"
 	@echo "  setup          Install dependencies and git hooks"
 	@echo "  clean          Remove build artifacts"
-	@echo ""
+	@echo "  install-deps-debian  Install system dependencies (Debian/Ubuntu)"
+	@echo "  release        Create a new release"
 	@echo "  changelog      Generate changelog from conventional commits"
 	@echo ""
 	@echo "Template:"
-	@echo "  initialize     Interactive project initialization (rename + bundle ID)"
-	@echo "  rename         Non-interactive rename (requires PROJECT_NAME, BUNDLE_ID env vars)"
-	@echo "  template-check       Check for drift against upstream template"
+	@echo "  template-check       Check template drift against upstream"
 	@echo "  bring-up-to-date     Sync with upstream template (dry-run default)"
 	@echo "  bring-up-to-date-all Sync all downstream projects (dry-run default)"
 	@echo "  sync-cousins         Sync shared layer to cousin templates (dry-run default)"
 	@echo ""
+
+## Initialization ------------------------------------------------------------
+
+initialize: ## Run project initialization script
+	scripts/initialize.sh
+
+rename: ## Run project rename script
+	scripts/rename.sh
+
+## Development targets -------------------------------------------------------
 
 dev: ## Run tauri dev server
 	pnpm tauri dev
@@ -68,6 +101,32 @@ storybook: ## Launch Storybook dev server
 
 ports: ## Show auto-assigned port block for this worktree
 	@scripts/dev-port.sh --all
+
+## Frontend ------------------------------------------------------------------
+
+frontend-dev: ## Run Vite dev server
+	cd src-vue && pnpm run dev
+
+frontend-build: ## Build Vue for production
+	cd src-vue && pnpm run build
+
+frontend-preview: ## Preview production build
+	cd src-vue && pnpm run preview
+
+frontend-lint: ## Run frontend linter
+	pnpm run frontend:lint
+
+frontend-test: ## Run frontend tests
+	pnpm run frontend:test
+
+frontend-typecheck: ## Run frontend type checking
+	pnpm run frontend:typecheck
+
+frontend-format: ## Format frontend code
+	cd src-vue && pnpm run format
+
+frontend-format-check: ## Check frontend formatting
+	cd src-vue && pnpm run format:check
 
 ## Linting & Formatting ------------------------------------------------------
 
@@ -89,7 +148,7 @@ format-check: ## Check formatting without changes
 typecheck: ## Run frontend type checking
 	pnpm run frontend:typecheck
 
-full-check: lint format-check typecheck ## Run all code checks
+full-check: lint format-check typecheck ## Run all code checks (lint + format-check + typecheck)
 
 full-write: ## Auto-fix all formatting (frontend + Rust)
 	pnpm run format
@@ -104,7 +163,7 @@ test: ## Run all tests (frontend + Rust)
 test-unit: ## Run frontend unit tests only
 	pnpm run frontend:test
 
-## Rust ----------------------------------------------------------------------
+## Rust / Backend ------------------------------------------------------------
 
 rust-lint: ## Run cargo clippy
 	cd src-tauri && cargo clippy -- -D warnings
@@ -114,6 +173,13 @@ rust-format: ## Run cargo fmt
 
 rust-test: ## Run cargo test
 	cd src-tauri && cargo test
+
+backend-lint: rust-lint ## Alias for rust-lint
+
+backend-format-check: ## Check backend formatting
+	pnpm run backend:format:check
+
+backend-test: rust-test ## Alias for rust-test
 
 ## CI & Setup ----------------------------------------------------------------
 
@@ -126,22 +192,13 @@ setup: ## Install dependencies and git hooks
 	pnpm run project:init
 	pnpm lefthook install
 
-clean: ## Remove build artifacts
-	pnpm run clean
+changelog: ## Generate changelog from conventional commits
+	git-cliff --output CHANGELOG.md
 
 ## Template ------------------------------------------------------------------
 
-initialize: ## Interactive project initialization
-	bash scripts/initialize.sh
-
-rename: ## Non-interactive rename (PROJECT_NAME and BUNDLE_ID env vars required)
-	bash scripts/rename.sh
-
-template-check: ## Check for drift against upstream template
-	bash scripts/sync-template-check
-
-changelog: ## Generate changelog from conventional commits
-	git-cliff --output CHANGELOG.md
+template-check: ## Check template drift against upstream
+	pnpm run template:check
 
 bring-up-to-date: ## Sync with upstream template (dry-run default; pass ARGS="--execute" to run)
 	bash scripts/bring_up_to_date.sh $(ARGS)
@@ -151,3 +208,12 @@ bring-up-to-date-all: ## Sync all downstream projects (dry-run default; pass ARG
 
 sync-cousins: ## Sync shared layer to cousin templates (dry-run default; pass ARGS="--execute" to run)
 	bash scripts/sync_cousins.sh $(ARGS)
+
+clean: ## Remove build artifacts
+	pnpm run clean
+
+install-deps-debian: ## Install system dependencies (Debian/Ubuntu)
+	sudo apt install build-essential pkg-config libgtk-3-dev libglib2.0-dev libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev libssl-dev
+
+release: ## Create a new release
+	pnpm run release

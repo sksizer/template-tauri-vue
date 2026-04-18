@@ -5,9 +5,6 @@
   "type": "module",
   "scripts": {
     "tauri": "node scripts/tauri-wrapper.mjs",
-    "dev": "cd src-vue && pnpm run dev",
-    "build": "cd src-vue && pnpm run build",
-    "preview": "cd src-vue && pnpm preview",
     "clean:frontend": "cd src-vue && pnpm run clean",
     "clean:backend": "rm -Rf src-tauri/target && rm -f src-tauri/Cargo.lock",
     "clean:root": "rm -Rf node_modules",
@@ -15,34 +12,34 @@
     "install_dependencies:debian": "sudo apt install build-essential pkg-config libgtk-3-dev libglib2.0-dev libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev libssl-dev",
     "project:init": "pnpm install && cd src-vue && pnpm install",
     "release": "release-it",
+    "prepare": "lefthook install",
     "frontend:lint": "cd src-vue && pnpm run lint",
     "frontend:typecheck": "cd src-vue && pnpm run typecheck",
     "frontend:test": "cd src-vue && pnpm run test",
-    "frontend:format": "cd src-vue && pnpm run format",
-    "frontend:format:check": "cd src-vue && pnpm run format:check",
-    "backend:lint": ".scripts/backend-lint",
-    "backend:format:check": ".scripts/backend-format-check",
-    "backend:test": ".scripts/backend-test",
-    "format": "pnpm run frontend:format",
-    "format:check": "pnpm run frontend:format:check",
-    "storybook": "cd src-vue && pnpm run storybook",
-    "storybook:build": "cd src-vue && pnpm run build-storybook"
+    "backend:lint": "scripts/backend-lint",
+    "backend:format:check": "scripts/backend-format-check",
+    "backend:test": "scripts/backend-test",
+    "template:check": "scripts/sync-template-check",
+    "format": "cd src-vue && pnpm run format",
+    "format:check": "cd src-vue && pnpm run format:check",
+    "storybook": "cd src-vue && STORYBOOK_PORT=${STORYBOOK_PORT:-1421} pnpm run storybook",
+    "storybook:build": "cd src-vue && pnpm run storybook:build"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.10.1",
-    "@tauri-apps/plugin-opener": "^2.5.3"
+    "pnpm": "^10.33.0"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild", "lefthook"]
+    "onlyBuiltDependencies": [
+      "lefthook"
+    ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@commitlint/types": "^20.5.0",
     "@release-it/bumper": "^7.0.5",
-    "@tauri-apps/cli": "^2.10.0",
-    "lefthook": "^1.11.13",
-    "release-it": "^19.2.4",
-    "typescript": "^5.9.3",
-    "vite": "^7.2.4"
+    "@tauri-apps/cli": "^2.10.1",
+    "lefthook": "^2.1.6",
+    "release-it": "^19.2.4"
   }
 }
